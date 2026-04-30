@@ -4,16 +4,20 @@
     {
       "src": "new_ui/package.json",
       "use": "@vercel/next"
-    },
-    {
-      "src": "api/**/*.py",
-      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
+      "src": "/icons/(.*)",
+      "dest": "/new_ui/public/icons/$1"
+    },
+    {
       "src": "/api/(.*)",
-      "dest": "api/$1.py"
+      "dest": "/new_ui/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/new_ui/$1"
     }
   ]
 }
