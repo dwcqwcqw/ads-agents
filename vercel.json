@@ -3,21 +3,10 @@
   "builds": [
     {
       "src": "new_ui/package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/icons/(.*)",
-      "dest": "/new_ui/public/icons/$1"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/new_ui/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/new_ui/$1"
+      "use": "@vercel/next",
+      "config": {
+        "installCommand": "npm install --legacy-peer-deps"
+      }
     }
   ]
 }
