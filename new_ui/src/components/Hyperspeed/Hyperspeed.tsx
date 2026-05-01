@@ -500,6 +500,8 @@ const Hyperspeed = ({ effectOptions }: { effectOptions?: any }) => {
 
         window.addEventListener('resize', this.onWindowResize);
 
+        // Mark as initialized right before starting the render loop
+        this.appInitialized = true;
         this.tick();
       }
 
@@ -632,8 +634,15 @@ const Hyperspeed = ({ effectOptions }: { effectOptions?: any }) => {
 
       renderPass: any;
       bloomPass: any;
+      appInitialized: boolean = false;
 
       tick = () => {
+        // If not initialized yet, wait and retry
+        if (!this.appInitialized) {
+          requestAnimationFrame(this.tick);
+          return;
+        }
+
         // Guard against component being disposed or renderer not ready
         if (!this.renderer || !this.camera || !this.composer) {
           requestAnimationFrame(this.tick);
