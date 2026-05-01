@@ -621,6 +621,10 @@ const Hyperspeed = ({ effectOptions }: { effectOptions?: any }) => {
           this.hasValidSize = false;
           return;
         }
+        // Guard against composer not being initialized yet
+        if (!this.composer) {
+          return;
+        }
         this.composer.setSize(width, height, updateStyles);
         this.hasValidSize = true;
       }

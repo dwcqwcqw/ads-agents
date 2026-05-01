@@ -64,6 +64,22 @@ const AGENTS = [
   { id: "optimization", name: "优化分析智能体", avatar: "/icons/iris.webp", color: "#06b6d4", bgLight: "#ecfeff" }
 ];
 
+// Hyperspeed 动效配置 - 提取到组件外部避免每次渲染创建新对象
+const HERO_HYPERSPEED_OPTIONS = {
+  distortion: 'turbulentDistortion',
+  length: 400,
+  colors: {
+    roadColor: 0x0a0a0f,
+    islandColor: 0x0f0f15,
+    background: 0x000000,
+    shoulderLines: 0x3b82f6,
+    brokenLines: 0x6366f1,
+    leftCars: [0x8b5cf6, 0xa855f7, 0xc084fc],
+    rightCars: [0x06b6d4, 0x22d3ee, 0x67e8f9],
+    sticks: 0x3b82f6,
+  }
+};
+
 interface WorkflowStep {
   id: string;
   agentId: string;
@@ -1262,20 +1278,7 @@ CTA：限时特惠 年卡仅¥299`
         {/* Hyperspeed 动效背景 */}
         <div className="absolute inset-0 z-0">
           <Hyperspeed
-            effectOptions={{
-              distortion: 'turbulentDistortion',
-              length: 400,
-              colors: {
-                roadColor: 0x0a0a0f,
-                islandColor: 0x0f0f15,
-                background: 0x000000,
-                shoulderLines: 0x3b82f6,
-                brokenLines: 0x6366f1,
-                leftCars: [0x8b5cf6, 0xa855f7, 0xc084fc],
-                rightCars: [0x06b6d4, 0x22d3ee, 0x67e8f9],
-                sticks: 0x3b82f6,
-              }
-            }}
+            effectOptions={HERO_HYPERSPEED_OPTIONS}
           />
         </div>
         
