@@ -538,10 +538,10 @@ const Hyperspeed = ({ effectOptions }: { effectOptions?: any }) => {
 
         let time = this.clock.elapsedTime + this.timeOffset;
 
-        this.rightCarLights.update(time);
-        this.leftCarLights.update(time);
-        this.leftSticks.update(time);
-        this.road.update(time);
+        if (this.rightCarLights) this.rightCarLights.update(time);
+        if (this.leftCarLights) this.leftCarLights.update(time);
+        if (this.leftSticks) this.leftSticks.update(time);
+        if (this.road) this.road.update(time);
 
         let updateCamera = false;
         let fovChange = lerp(this.camera.fov, this.fovTarget, lerpPercentage);
@@ -568,6 +568,7 @@ const Hyperspeed = ({ effectOptions }: { effectOptions?: any }) => {
       }
 
       render(delta: number) {
+        if (!this.composer) return;
         this.composer.render(delta);
       }
 
@@ -633,6 +634,12 @@ const Hyperspeed = ({ effectOptions }: { effectOptions?: any }) => {
       bloomPass: any;
 
       tick = () => {
+        // Guard against component being disposed or renderer not ready
+        if (!this.renderer || !this.camera || !this.composer) {
+          requestAnimationFrame(this.tick);
+          return;
+        }
+
         if (!this.hasValidSize) {
           const w = this.container.offsetWidth;
           const h = this.container.offsetHeight;
@@ -650,7 +657,7 @@ const Hyperspeed = ({ effectOptions }: { effectOptions?: any }) => {
 
         if (resizeRendererToDisplaySize(this.renderer, this.setSize)) {
           const canvas = this.renderer.domElement;
-          if (this.hasValidSize) {
+          if (this.hasValidSize && canvas) {
             this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
             this.camera.updateProjectionMatrix();
           }
