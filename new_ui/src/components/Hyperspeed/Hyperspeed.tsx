@@ -1188,7 +1188,9 @@ const Hyperspeed = ({ effectOptions }: { effectOptions?: any }) => {
     });
 
     return () => {
+      // Cancel the animation frame first to prevent any more ticks
       if (appRef.current) {
+        appRef.current.appInitialized = false; // This will cause tick to wait indefinitely
         appRef.current.dispose();
         appRef.current = null;
       }
