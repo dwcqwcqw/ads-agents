@@ -369,24 +369,35 @@ const Hyperspeed = ({ effectOptions }: { effectOptions?: any }) => {
         const initW = Math.max(1, container.offsetWidth);
         const initH = Math.max(1, container.offsetHeight);
 
-        this.renderer = new THREE.WebGLRenderer({
-          antialias: false,
-          alpha: true,
-          powerPreference: 'high-performance'
-        });
-        this.renderer.setSize(initW, initH, false);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        
-        // Ensure the context is ready before creating the composer
-        const gl = this.renderer.getContext();
-        if (!gl) {
-          console.error('WebGL context not available');
+        try {
+          this.renderer = new THREE.WebGLRenderer({
+            antialias: false,
+            alpha: true,
+            powerPreference: 'high-performance'
+          });
+          this.renderer.setSize(initW, initH, false);
+          this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+          
+          // Ensure the context is ready before creating the composer
+          const gl = this.renderer.getContext();
+          if (!gl) {
+            console.error('WebGL context not available');
+            this.renderer.dispose();
+            this.renderer = null;
+            return;
+          }
+          
+          this.composer = new EffectComposer(this.renderer);
+          this.composer.setSize(initW, initH);
+          container.append(this.renderer.domElement);
+        } catch (e) {
+          console.error('Failed to initialize WebGL renderer:', e);
+          if (this.renderer) {
+            this.renderer.dispose();
+            this.renderer = null;
+          }
           return;
         }
-        
-        this.composer = new EffectComposer(this.renderer);
-        this.composer.setSize(initW, initH);
-        container.append(this.renderer.domElement);
 
         this.camera = new THREE.PerspectiveCamera(options.fov, initW / initH, 0.1, 10000);
         this.camera.position.z = -5;
